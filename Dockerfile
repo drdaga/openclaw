@@ -73,17 +73,21 @@ ENV OPENCLAW_PREFER_PNPM=1
 RUN pnpm ui:build
 
 # Expose the CLI binary without requiring npm global writes as non-root.
+# Expose the CLI binary without requiring npm global writes as non-root.
 USER root
 RUN ln -sf /app/openclaw.mjs /usr/local/bin/openclaw \
  && chmod 755 /app/openclaw.mjs
 
-# ↓↓↓ ADD THIS BLOCK RIGHT HERE ↓↓↓
-RUN curl -fsSL https://claude.ai/install.sh | bash && \
-    curl -L code.kimi.com/install.sh | bash
-# ↑↑↑ END OF YOUR ADDITION ↑↑↑
+# Install Claude Code CLI (official installer)
+RUN curl -fsSL https://code.claude.com/install.sh | bash \
+ && ln -sf /root/.local/bin/claude /usr/local/bin/claude || true
+
+# Install Kimi CLI via uv (official installer)
+RUN curl -fsSL https://astral.sh/uv/install.sh | sh \
+ && /root/.local/bin/uv tool install --python 3.13 kimi-cli \
+ && ln -sf /root/.local/bin/kimi /usr/local/bin/kimi || true
 
 ENV NODE_ENV=production
-
 # Security hardening: Run as non-root user
 # The node:22-bookworm image includes a 'node' user (uid 1000)
 # This reduces the attack surface by preventing container escape via root privileges
