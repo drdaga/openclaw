@@ -28,6 +28,8 @@ services:
         "--port",
         "18789",
         "--allow-unconfigured",
+        "--dangerously-allow-host-header-origin-fallback",
+
       ]
     healthcheck:
       test:
