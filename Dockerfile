@@ -77,6 +77,11 @@ USER root
 RUN ln -sf /app/openclaw.mjs /usr/local/bin/openclaw \
  && chmod 755 /app/openclaw.mjs
 
+# ↓↓↓ ADD THIS BLOCK RIGHT HERE ↓↓↓
+RUN curl -fsSL https://claude.ai/install.sh | bash && \
+    curl -L code.kimi.com/install.sh | bash
+# ↑↑↑ END OF YOUR ADDITION ↑↑↑
+
 ENV NODE_ENV=production
 
 # Security hardening: Run as non-root user
