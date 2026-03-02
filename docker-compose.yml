@@ -12,7 +12,6 @@ services:
       CLAUDE_WEB_SESSION_KEY: ${CLAUDE_WEB_SESSION_KEY:-}
       CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE:-}
     volumes:
-      # Ensure entrypoint.sh is in your repo root so it's copied during build
       - openclaw-config:/home/node/.openclaw
       - openclaw-workspace:/home/node/.openclaw/workspace
     ports:
@@ -20,8 +19,8 @@ services:
       - "${OPENCLAW_BRIDGE_PORT:-18790}:18790"
     init: true
     restart: unless-stopped
-    # Modified to use the entrypoint script
-    command: ["/bin/sh", "/home/node/entrypoint.sh"]
+    # Updated to match the /app directory from the Dockerfile
+    command: ["/bin/sh", "/app/entrypoint.sh"]
     healthcheck:
       test:
         [
